@@ -129,17 +129,17 @@ def insert_val(url,connection,cursor):
         print count[0]
         
         if count[0] < 1000:
-            cursor.execute("select urls from data where urls = ? ;", (url,))
+            cursor.execute("select urls from data where urls = ? ;", (unicode(url),))
             rows = cursor.fetchone()
             if rows:
                 cursor.execute("update data set score=score+1 where urls = ?;",
-                               (url,))      
+                               (unicode(url),))      
                 cursor.execute("update data set root=0;")
                 connection.commit()
                 showDB(connection,cursor)
                 return True, None
             cursor.execute("update data set root=0;")
-            cursor.execute("insert into data values(?, 1, 1);", (url,))    
+            cursor.execute("insert into data values(?, 1, 1);", (unicode(url),))    
              
             connection.commit()
             showDB(connection,cursor)
