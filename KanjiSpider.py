@@ -51,10 +51,10 @@ def crawl():
     crawl() is the first method gets called when the module is run.The first url given by the user will get stored into the database by calling the insert_val() method and depending on the returned value call() method gets called.After that the first element of the queue is popped out and again insert_val() method gets called with that element i.e. the url.
 
     '''
-    u = raw_input("Enter a URL: ")
     connection, cursor=openDB()
-    createDB(connection,cursor)
+    #createDB(connection,cursor)
     resetDB(connection,cursor)
+    u = raw_input("Enter a URL: ")
     x, u = insert_val(u,connection,cursor)
     while True:
         if x:
