@@ -53,6 +53,7 @@ def crawl():
     '''
     u = raw_input("Enter a URL: ")
     connection, cursor=openDB()
+    createDB(connection,cursor)
     resetDB(connection,cursor)
     x, u = insert_val(u,connection,cursor)
     while True:
