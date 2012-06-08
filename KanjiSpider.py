@@ -5,18 +5,25 @@ import sgmllib
 import sys
 import os
 
-q = deque([])         # This is a queue to store the urls as BFS algorithm is used here.
+# This is a queue to store the urls as BFS algorithm is used here.
+q = deque([])         
 
 class URLLister(sgmllib.SGMLParser):
     '''
-    URLLister extends SGMLParser class which is inside the sgmllib module.The reset method of the URLLister class gets called by the __init__ method of the SGMLParser class.Whenever SGMLParser finds a '<a' tag the start_a() method gets called.attrs is a list of tuples containing attribute-value pair.
-Here a queue is maintained through out the whole program to store all the child link of their immediate root link.Every root link is a child link of its immediate root link and so on.
+    URLLister extends SGMLParser class which is inside the sgmllib module.The 
+reset method of the URLLister class gets called by the __init__ method of the
+SGMLParser class.Whenever SGMLParser finds a '<a' tag the start_a() method
+gets called.attrs is a list of tuples containing attribute-value pair.Here a
+queue is maintained through out the whole program to store all the child link
+of their immediate root link.Every root link is a child link of its immediate
+root link and so on.
     '''
     def reset(self):
         sgmllib.SGMLParser.reset(self)
         
     def store(self,u):
-        self.url = u            # This is a string object to store the immediate parent url.
+    	 # This is a string object to store the immediate parent url.
+        self.url = u           
         
     def start_a(self,attrs):        
         self.href = [v for k, v in attrs if k == "href"]
@@ -32,7 +39,12 @@ Here a queue is maintained through out the whole program to store all the child 
 
 def call(u=None):
     '''
-    This method is called by the crawl() method to parse the given url. It passes the url to the URLLister class to visit the page and append all the links found on that page to the queue.Sometimes the parser gets confused due to some bad coding found in the given url while parsing and gives error.That is why I put this code into a try-except block to avoid this kind of confusion.
+    This method is called by the crawl() method to parse the given url. It
+passes the url to the URLLister class to visit the page and append all the
+links found on that page to the queue.Sometimes the parser gets confused
+due to some bad coding found in the given url while parsing and gives error.
+That is why I put this code into a try-except block to avoid this kind of
+confusion.
 
     '''
     try:
@@ -49,7 +61,12 @@ def call(u=None):
         
 def crawl():
     '''
-    crawl() is the first method gets called when the module is run.The first url given by the user will get stored into the database by calling the insert_val() method and depending on the returned value call() method gets called.After that the first element of the queue is popped out and again insert_val() method gets called with that element i.e. the url.
+    crawl() is the first method gets called when the module is run.The
+first url given by the user will get stored into the database by
+calling the insert_val() method and depending on the returned value
+call() method gets called.After that the first element of the queue
+is popped out and again insert_val() method gets called with that
+element i.e. the url.
 
     '''
     if os.path.exists("./mydb"):
@@ -124,7 +141,12 @@ def openDB():
 
 def insert_val(url,connection,cursor):
     '''
-    This method gets called by the crawl method.The url it receives, either inserts it into the database or the score attribute gets increased by one everytime it is found in the database.The root(=1) attribute defines the url that is going to be visited.After being visited the value of the root attribute is changed to 0.count is used to set limit of the crawler i.e. how many links will be stored n the database.
+    This method gets called by the crawl method.The url it receives, either
+inserts it into the database or the score attribute gets increased by one
+everytime it is found in the database.The root(=1) attribute defines the
+url that is going to be visited.After being visited the value of the root
+attribute is changed to 0.count is used to set limit of the crawler
+i.e. how many links will be stored n the database.
     '''
     try:
         cursor.execute("select count(*) from data;")
