@@ -3,6 +3,7 @@ import sqlite3
 from collections import deque
 import sgmllib
 import sys
+import os
 
 q = deque([])         # This is a queue to store the urls as BFS algorithm is used here.
 
@@ -51,9 +52,13 @@ def crawl():
     crawl() is the first method gets called when the module is run.The first url given by the user will get stored into the database by calling the insert_val() method and depending on the returned value call() method gets called.After that the first element of the queue is popped out and again insert_val() method gets called with that element i.e. the url.
 
     '''
-    connection, cursor=openDB()
-    #createDB(connection,cursor)
-    resetDB(connection,cursor)
+    #connection, cursor=openDB()
+    if os.path.exists("./mydb"):
+        connection, cursor=openDB()
+        resetDB(connection,cursor)
+    else:
+        connection, cursor=openDB()
+        createDB(connection,cursor)
     u = raw_input("Enter a URL: ")
     x, u = insert_val(u,connection,cursor)
     while True:
